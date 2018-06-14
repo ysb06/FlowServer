@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBoxText = new System.Windows.Forms.GroupBox();
             this.buttonInput = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textInput = new System.Windows.Forms.TextBox();
             this.textConsole = new System.Windows.Forms.RichTextBox();
             this.groupBoxControls = new System.Windows.Forms.GroupBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -51,7 +51,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxText.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxText.Controls.Add(this.buttonInput);
-            this.groupBoxText.Controls.Add(this.textBox1);
+            this.groupBoxText.Controls.Add(this.textInput);
             this.groupBoxText.Controls.Add(this.textConsole);
             this.groupBoxText.Location = new System.Drawing.Point(12, 62);
             this.groupBoxText.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
@@ -70,15 +70,17 @@
             this.buttonInput.TabIndex = 2;
             this.buttonInput.Text = "입   력";
             this.buttonInput.UseVisualStyleBackColor = true;
+            this.buttonInput.Click += new System.EventHandler(this.ButtonInput_Click);
             // 
-            // textBox1
+            // textInput
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.textInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(6, 336);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(141, 21);
-            this.textBox1.TabIndex = 1;
+            this.textInput.Location = new System.Drawing.Point(6, 336);
+            this.textInput.Name = "textInput";
+            this.textInput.Size = new System.Drawing.Size(141, 21);
+            this.textInput.TabIndex = 1;
+            this.textInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextInput_KeyDown);
             // 
             // textConsole
             // 
@@ -124,7 +126,7 @@
             // MenuItem_File_Quit
             // 
             this.MenuItem_File_Quit.Name = "MenuItem_File_Quit";
-            this.MenuItem_File_Quit.Size = new System.Drawing.Size(180, 22);
+            this.MenuItem_File_Quit.Size = new System.Drawing.Size(115, 22);
             this.MenuItem_File_Quit.Text = "종료(&Q)";
             this.MenuItem_File_Quit.Click += new System.EventHandler(this.MenuItem_File_Quit_Click);
             // 
@@ -179,7 +181,7 @@
 
         private System.Windows.Forms.GroupBox groupBoxText;
         private System.Windows.Forms.Button buttonInput;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textInput;
         private System.Windows.Forms.RichTextBox textConsole;
         private System.Windows.Forms.GroupBox groupBoxControls;
         private System.Windows.Forms.MenuStrip menuStrip;

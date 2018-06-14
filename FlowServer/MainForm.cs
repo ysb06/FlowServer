@@ -14,17 +14,20 @@ namespace FlowServer
 {
     public partial class MainForm : Form
     {
+        MainThreadController threadMain;
+
+        private string currentConsoleMessageRequestingAgent = "";
+
         public MainForm()
         {
-            
             InitializeComponent();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            WriteConsoleMessage("Main", "This is an apple", PrintType.ERROR);
-            WriteConsoleMessage("Main", "This is an banana", PrintType.DEBUGING);
-            WriteConsoleMessage("Main", "This is an candy", PrintType.WARNING);
+            ConsoleController.Print += WriteConsoleMessage;
+            threadMain = new MainThreadController();
+          
         }
 
         private void MenuItem_File_Quit_Click(object sender, EventArgs e)
@@ -39,15 +42,19 @@ namespace FlowServer
                 int initPoint = textConsole.Text.Length;
                 Font baseFont = textConsole.Font;
 
-                textConsole.AppendText(agent);
-                textConsole.Select(initPoint, textConsole.Text.Length);
-                textConsole.SelectionFont = new Font(baseFont.FontFamily, 12, FontStyle.Bold);
+                if(!currentConsoleMessageRequestingAgent.Equals(agent))
+                {
+                    textConsole.AppendText("\r\n");
+                    textConsole.AppendText(agent);
+                    textConsole.Select(initPoint, textConsole.Text.Length);
+                    textConsole.SelectionFont = new Font(baseFont.FontFamily, 12, FontStyle.Bold);
 
-                initPoint = textConsole.Text.Length;
-                textConsole.AppendText("\r\n\r\n");
-                textConsole.Select(initPoint, textConsole.Text.Length);
-                textConsole.SelectionFont = baseFont;
-
+                    initPoint = textConsole.Text.Length;
+                    textConsole.AppendText("\r\n\r\n");
+                    textConsole.Select(initPoint, textConsole.Text.Length);
+                    textConsole.SelectionFont = baseFont;
+                }
+                                
                 initPoint = textConsole.Text.Length;
                 textConsole.AppendText(text);
                 textConsole.Select(initPoint, textConsole.Text.Length);
@@ -68,14 +75,38 @@ namespace FlowServer
                     default:
                         break;
                 }
-                                
-                textConsole.AppendText("\r\n\r\n\r\n");
+
+                if (currentConsoleMessageRequestingAgent.Equals(agent))
+                {
+                    textConsole.AppendText("\r\n");
+                }
+                else
+                {
+                    textConsole.AppendText("\r\n\r\n");
+                }
+
+                currentConsoleMessageRequestingAgent = agent;
             });
         }
 
         private void HandleConsoleMessage()
         {
 
+        }
+
+        private void ButtonInput_Click(object sender, EventArgs e)
+        {
+            ConsoleController.MessageBroadcast(textInput.Text);
+            textInput.Text = "";
+        }
+
+        private void TextInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode.Equals(Keys.Enter))
+            {
+                ConsoleController.MessageBroadcast(textInput.Text);
+                textInput.Text = "";
+            }
         }
     }
 }
