@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
-using FlowServer.Server.Core;
+using FlowServer.Server;
 
 namespace FlowServer
 {

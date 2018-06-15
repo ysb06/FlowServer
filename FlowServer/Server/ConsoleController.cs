@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FlowServer.Server.Core
+namespace FlowServer.Server
 {
     public delegate void ConsoleControllerPrintHandler(string agent, string text, PrintType type);
     public delegate void ConsoleControllerBroadcastHandler(string message);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowServer.Server.Connection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,14 +8,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FlowServer.Server.Core
+namespace FlowServer.Server
 {
     class MainThreadController
     {
         private Thread threadMain;
 
-        private Socket socket;
-        private readonly IPEndPoint ipPoint = new IPEndPoint(IPAddress.Any, 50321);
+        private MainSocketManager mainSocket;
+
 
         public MainThreadController()
         {
@@ -28,20 +29,13 @@ namespace FlowServer.Server.Core
         {
             ConsoleController.Debug("Initializing main server thread is complete.", "Server Thread");
 
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-            socket.Bind(ipPoint);
-            socket.Listen(1);
-            socket.BeginAccept(SocketAcceptCallback, new object());
+            mainSocket = new MainSocketManager();
+            mainSocket.StartConnection();
         }
 
         private void ConsoleMessage_Receive(string message)
         {
             Console.WriteLine(message);
-        }
-
-        private void SocketAcceptCallback(IAsyncResult iar)
-        {
-            ConsoleController.Debug("Accept: " + socket.Connected);
         }
     }
 }
