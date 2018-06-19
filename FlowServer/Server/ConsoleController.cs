@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowServer.Server.Connection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace FlowServer.Server
     public delegate void ConsoleControllerPrintHandler(string agent, string text, PrintType type);
     public delegate void ConsoleControllerBroadcastHandler(string message);
     public enum PrintType { NORMAL, DEBUGING, WARNING, ERROR }
+
+    public delegate void ConsoleControllerConnectionHandler(List<FlowClient> list);
 
     public class ConsoleController
     {
@@ -35,6 +38,19 @@ namespace FlowServer.Server
             remove
             {
                 BroadcastEvent -= value;
+            }
+        }
+
+        private static event ConsoleControllerConnectionHandler UpdateConnectionEvent;
+        public static event ConsoleControllerConnectionHandler UpdateConnection
+        {
+            add
+            {
+                UpdateConnectionEvent += value;
+            }
+            remove
+            {
+                UpdateConnectionEvent -= value;
             }
         }
 
@@ -64,5 +80,10 @@ namespace FlowServer.Server
             PrintEvent(agent, content, PrintType.ERROR);
         }
 
+
+        public static void UpdateConnectionList(List<FlowClient> list)
+        {
+            UpdateConnectionEvent(list);
+        }
     }
 }

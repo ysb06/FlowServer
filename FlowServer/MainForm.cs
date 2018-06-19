@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using FlowServer.Server;
+using FlowServer.Server.Connection;
 
 namespace FlowServer
 {
@@ -26,6 +27,7 @@ namespace FlowServer
         private void MainForm_Load(object sender, EventArgs e)
         {
             ConsoleController.Print += WriteConsoleMessage;
+            ConsoleController.UpdateConnection += UpdateConnectionList;
             threadMain = new MainThreadController();
           
         }
@@ -89,11 +91,6 @@ namespace FlowServer
             });
         }
 
-        private void HandleConsoleMessage()
-        {
-
-        }
-
         private void ButtonInput_Click(object sender, EventArgs e)
         {
             ConsoleController.MessageBroadcast(textInput.Text);
@@ -107,6 +104,19 @@ namespace FlowServer
                 ConsoleController.MessageBroadcast(textInput.Text);
                 textInput.Text = "";
             }
+        }
+
+        private void UpdateConnectionList(List<FlowClient> clients)
+        {
+            BeginInvoke((MethodInvoker)delegate
+            {
+                connectionList.Items.Clear();
+
+                foreach (FlowClient client in clients)
+                {
+                    connectionList.Items.Add(client);
+                }
+            });
         }
     }
 }

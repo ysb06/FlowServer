@@ -39,7 +39,9 @@
             this.MenuItem_File_Quit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.connectionList = new System.Windows.Forms.ListBox();
             this.groupBoxText.SuspendLayout();
+            this.groupBoxControls.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -97,6 +99,7 @@
             // 
             this.groupBoxControls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxControls.Controls.Add(this.connectionList);
             this.groupBoxControls.Location = new System.Drawing.Point(252, 62);
             this.groupBoxControls.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.groupBoxControls.Name = "groupBoxControls";
@@ -126,7 +129,7 @@
             // MenuItem_File_Quit
             // 
             this.MenuItem_File_Quit.Name = "MenuItem_File_Quit";
-            this.MenuItem_File_Quit.Size = new System.Drawing.Size(115, 22);
+            this.MenuItem_File_Quit.Size = new System.Drawing.Size(180, 22);
             this.MenuItem_File_Quit.Text = "종료(&Q)";
             this.MenuItem_File_Quit.Click += new System.EventHandler(this.MenuItem_File_Quit_Click);
             // 
@@ -151,6 +154,15 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 20);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
+            // connectionList
+            // 
+            this.connectionList.FormattingEnabled = true;
+            this.connectionList.ItemHeight = 12;
+            this.connectionList.Location = new System.Drawing.Point(6, 20);
+            this.connectionList.Name = "connectionList";
+            this.connectionList.Size = new System.Drawing.Size(348, 88);
+            this.connectionList.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -162,12 +174,13 @@
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.MaximumSize = new System.Drawing.Size(800, 600);
-            this.MinimumSize = new System.Drawing.Size(520, 150);
+            this.MinimumSize = new System.Drawing.Size(600, 250);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBoxText.ResumeLayout(false);
             this.groupBoxText.PerformLayout();
+            this.groupBoxControls.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);
@@ -189,6 +202,7 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItem_File_Quit;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ListBox connectionList;
     }
 }
 

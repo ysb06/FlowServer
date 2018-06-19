@@ -30,7 +30,6 @@ namespace FlowServer.Server
             ConsoleController.Debug("Initializing main server thread is complete.", "Server Thread");
 
             mainSocket = new MainSocketManager();
-            mainSocket.StartConnection();
         }
 
         private void ConsoleMessage_Receive(string message)
