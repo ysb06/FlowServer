@@ -7,26 +7,53 @@ using System.Threading.Tasks;
 
 namespace FlowServer.Server.Connection
 {
-    public class FlowClient
+    public class FlowClient : IFlowClient
     {
         public const int BUFFER_SIZE = 1024;
 
         private readonly Socket connection = null;
-        private readonly byte[] buffer = new byte[BUFFER_SIZE];
+        private byte[] buffer = new byte[BUFFER_SIZE];
         private readonly StringBuilder stringBuilder = new StringBuilder();
 
         private readonly ClientHandler handler;
 
-        public FlowClient(Socket socket, ClientHandler handler)
+        public FlowClient(Socket childSocket, ClientHandler handler)
         {
-            connection = socket;
+            connection = childSocket;
+            buffer = Encoding.UTF8.GetBytes("Server : Accept");
+            connection.Send(buffer);
             this.handler = handler;
         }
 
-        private void Dispose()
+        public override string ToString()
         {
+            if (connection == null)
+            {
+                return "Null Connection";
+            }
+            else
+            {
+                return connection.RemoteEndPoint.ToString();
+            }
+        }
+
+        public void Dispose()
+        {
+            connection.Disconnect(false);
+            connection.Close();
             connection.Dispose();
             handler(this);
+        }
+
+        public void SendMessage(string message)
+        {
+            buffer = Encoding.UTF8.GetBytes(message);
+            connection.Send(buffer);
+        }
+
+        public void SendMessage(byte[] message)
+        {
+            connection.Send(message);
         }
     }
 }

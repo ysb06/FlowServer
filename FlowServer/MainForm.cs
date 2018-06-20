@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using FlowServer.Server;
+using FlowServer.Server.FlowConsole;
 using FlowServer.Server.Connection;
 
 namespace FlowServer
 {
     public partial class MainForm : Form
     {
-        MainThreadController threadMain;
+        private MainSocketManager threadMain;
 
         private string currentConsoleMessageRequestingAgent = "";
 
@@ -28,8 +29,14 @@ namespace FlowServer
         {
             ConsoleController.Print += WriteConsoleMessage;
             ConsoleController.UpdateConnection += UpdateConnectionList;
-            threadMain = new MainThreadController();
+            ConsoleController.Broadcast += ConsoleController_Broadcast;
+            threadMain = new MainSocketManager();
           
+        }
+
+        private void ConsoleController_Broadcast(string message, string[] convertedArgs)
+        {
+            ConsoleController.Log("> " + message);
         }
 
         private void MenuItem_File_Quit_Click(object sender, EventArgs e)
@@ -69,7 +76,7 @@ namespace FlowServer
                         textConsole.SelectionColor = Color.Blue;
                         break;
                     case PrintType.WARNING:
-                        textConsole.SelectionColor = Color.OrangeRed;
+                        textConsole.SelectionColor = Color.Orange;
                         break;
                     case PrintType.ERROR:
                         textConsole.SelectionColor = Color.Red;
@@ -106,17 +113,51 @@ namespace FlowServer
             }
         }
 
-        private void UpdateConnectionList(List<FlowClient> clients)
+        private void UpdateConnectionList(List<IFlowClient> clients)
         {
             BeginInvoke((MethodInvoker)delegate
             {
-                connectionList.Items.Clear();
+                listBoxConnection.Items.Clear();
 
                 foreach (FlowClient client in clients)
                 {
-                    connectionList.Items.Add(client);
+                    listBoxConnection.Items.Add(client);
+                }
+
+                if(listBoxConnection.Items.Count > 0)
+                {
+                    listBoxConnection.SelectedIndex = 0;
                 }
             });
+        }
+
+        private void ButtonClientSend_Click(object sender, EventArgs e)
+        {
+            if(listBoxConnection.SelectedIndex < 0)
+            {
+                textSendClient.Text = "";
+                return;
+            }
+            ConsoleController.MessageBroadcast("send " + listBoxConnection.Items[listBoxConnection.SelectedIndex] + " " + textSendClient.Text);
+            textSendClient.Text = "";
+        }
+
+        private void TextSendClient_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode.Equals(Keys.Enter))
+            {
+                ButtonClientSend_Click(sender, e);
+            }
+        }
+
+        private void buttonDisconnect_Click(object sender, EventArgs e)
+        {
+            if (listBoxConnection.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            ConsoleController.MessageBroadcast("disconnect " + listBoxConnection.Items[listBoxConnection.SelectedIndex]);
         }
     }
 }

@@ -34,14 +34,22 @@
             this.textInput = new System.Windows.Forms.TextBox();
             this.textConsole = new System.Windows.Forms.RichTextBox();
             this.groupBoxControls = new System.Windows.Forms.GroupBox();
+            this.tabControls = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.buttonDisconnect = new System.Windows.Forms.Button();
+            this.textSendClient = new System.Windows.Forms.TextBox();
+            this.buttonClientSend = new System.Windows.Forms.Button();
+            this.listBoxConnection = new System.Windows.Forms.ListBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.MenuItem_File = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_File_Quit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.connectionList = new System.Windows.Forms.ListBox();
             this.groupBoxText.SuspendLayout();
             this.groupBoxControls.SuspendLayout();
+            this.tabControls.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -66,11 +74,11 @@
             // buttonInput
             // 
             this.buttonInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonInput.Location = new System.Drawing.Point(153, 334);
+            this.buttonInput.Location = new System.Drawing.Point(153, 335);
             this.buttonInput.Name = "buttonInput";
             this.buttonInput.Size = new System.Drawing.Size(75, 23);
             this.buttonInput.TabIndex = 2;
-            this.buttonInput.Text = "입   력";
+            this.buttonInput.Text = "Input";
             this.buttonInput.UseVisualStyleBackColor = true;
             this.buttonInput.Click += new System.EventHandler(this.ButtonInput_Click);
             // 
@@ -91,6 +99,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textConsole.Location = new System.Drawing.Point(6, 20);
             this.textConsole.Name = "textConsole";
+            this.textConsole.ReadOnly = true;
             this.textConsole.Size = new System.Drawing.Size(222, 308);
             this.textConsole.TabIndex = 0;
             this.textConsole.Text = "";
@@ -99,7 +108,7 @@
             // 
             this.groupBoxControls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxControls.Controls.Add(this.connectionList);
+            this.groupBoxControls.Controls.Add(this.tabControls);
             this.groupBoxControls.Location = new System.Drawing.Point(252, 62);
             this.groupBoxControls.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.groupBoxControls.Name = "groupBoxControls";
@@ -107,6 +116,80 @@
             this.groupBoxControls.TabIndex = 2;
             this.groupBoxControls.TabStop = false;
             this.groupBoxControls.Text = "Controls";
+            // 
+            // tabControls
+            // 
+            this.tabControls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.tabControls.Controls.Add(this.tabPage1);
+            this.tabControls.Controls.Add(this.tabPage2);
+            this.tabControls.Location = new System.Drawing.Point(6, 20);
+            this.tabControls.Name = "tabControls";
+            this.tabControls.SelectedIndex = 0;
+            this.tabControls.Size = new System.Drawing.Size(348, 337);
+            this.tabControls.TabIndex = 0;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.buttonDisconnect);
+            this.tabPage1.Controls.Add(this.textSendClient);
+            this.tabPage1.Controls.Add(this.buttonClientSend);
+            this.tabPage1.Controls.Add(this.listBoxConnection);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 25, 3);
+            this.tabPage1.Size = new System.Drawing.Size(340, 311);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Clients Manager";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // buttonDisconnect
+            // 
+            this.buttonDisconnect.Location = new System.Drawing.Point(6, 129);
+            this.buttonDisconnect.Name = "buttonDisconnect";
+            this.buttonDisconnect.Size = new System.Drawing.Size(306, 23);
+            this.buttonDisconnect.TabIndex = 3;
+            this.buttonDisconnect.Text = "Disconnect";
+            this.buttonDisconnect.UseVisualStyleBackColor = true;
+            this.buttonDisconnect.Click += new System.EventHandler(this.buttonDisconnect_Click);
+            // 
+            // textSendClient
+            // 
+            this.textSendClient.Location = new System.Drawing.Point(6, 102);
+            this.textSendClient.Name = "textSendClient";
+            this.textSendClient.Size = new System.Drawing.Size(225, 21);
+            this.textSendClient.TabIndex = 2;
+            this.textSendClient.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextSendClient_KeyDown);
+            // 
+            // buttonClientSend
+            // 
+            this.buttonClientSend.Location = new System.Drawing.Point(237, 101);
+            this.buttonClientSend.Name = "buttonClientSend";
+            this.buttonClientSend.Size = new System.Drawing.Size(75, 23);
+            this.buttonClientSend.TabIndex = 1;
+            this.buttonClientSend.Text = "Send";
+            this.buttonClientSend.UseVisualStyleBackColor = true;
+            this.buttonClientSend.Click += new System.EventHandler(this.ButtonClientSend_Click);
+            // 
+            // listBoxConnection
+            // 
+            this.listBoxConnection.FormattingEnabled = true;
+            this.listBoxConnection.ItemHeight = 12;
+            this.listBoxConnection.Location = new System.Drawing.Point(6, 6);
+            this.listBoxConnection.Name = "listBoxConnection";
+            this.listBoxConnection.Size = new System.Drawing.Size(306, 88);
+            this.listBoxConnection.TabIndex = 0;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(340, 311);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // menuStrip
             // 
@@ -123,14 +206,14 @@
             this.MenuItem_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItem_File_Quit});
             this.MenuItem_File.Name = "MenuItem_File";
-            this.MenuItem_File.Size = new System.Drawing.Size(57, 20);
-            this.MenuItem_File.Text = "파일(&F)";
+            this.MenuItem_File.Size = new System.Drawing.Size(37, 20);
+            this.MenuItem_File.Text = "&File";
             // 
             // MenuItem_File_Quit
             // 
             this.MenuItem_File_Quit.Name = "MenuItem_File_Quit";
-            this.MenuItem_File_Quit.Size = new System.Drawing.Size(180, 22);
-            this.MenuItem_File_Quit.Text = "종료(&Q)";
+            this.MenuItem_File_Quit.Size = new System.Drawing.Size(97, 22);
+            this.MenuItem_File_Quit.Text = "&Quit";
             this.MenuItem_File_Quit.Click += new System.EventHandler(this.MenuItem_File_Quit_Click);
             // 
             // toolStrip
@@ -154,15 +237,6 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 20);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
-            // connectionList
-            // 
-            this.connectionList.FormattingEnabled = true;
-            this.connectionList.ItemHeight = 12;
-            this.connectionList.Location = new System.Drawing.Point(6, 20);
-            this.connectionList.Name = "connectionList";
-            this.connectionList.Size = new System.Drawing.Size(348, 88);
-            this.connectionList.TabIndex = 0;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -174,13 +248,16 @@
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.MaximumSize = new System.Drawing.Size(800, 600);
-            this.MinimumSize = new System.Drawing.Size(600, 250);
+            this.MinimumSize = new System.Drawing.Size(600, 300);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBoxText.ResumeLayout(false);
             this.groupBoxText.PerformLayout();
             this.groupBoxControls.ResumeLayout(false);
+            this.tabControls.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);
@@ -202,7 +279,13 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItem_File_Quit;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ListBox connectionList;
+        private System.Windows.Forms.ListBox listBoxConnection;
+        private System.Windows.Forms.TabControl tabControls;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button buttonClientSend;
+        private System.Windows.Forms.Button buttonDisconnect;
+        private System.Windows.Forms.TextBox textSendClient;
     }
 }
 

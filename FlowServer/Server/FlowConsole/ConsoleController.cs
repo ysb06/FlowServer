@@ -6,17 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FlowServer.Server
+namespace FlowServer.Server.FlowConsole
 {
     public delegate void ConsoleControllerPrintHandler(string agent, string text, PrintType type);
-    public delegate void ConsoleControllerBroadcastHandler(string message);
+    public delegate void ConsoleControllerBroadcastHandler(string message, string[] convertedArgs);
     public enum PrintType { NORMAL, DEBUGING, WARNING, ERROR }
 
-    public delegate void ConsoleControllerConnectionHandler(List<FlowClient> list);
+    public delegate void ConsoleControllerConnectionHandler(List<IFlowClient> list);
 
     public class ConsoleController
     {
         private static event ConsoleControllerPrintHandler PrintEvent;
+        /// <summary>
+        /// 콘솔 메시지 표시 요청이 왔을 때
+        /// </summary>
         public static event ConsoleControllerPrintHandler Print
         {
             add
@@ -29,6 +32,9 @@ namespace FlowServer.Server
             }
         }
         private static event ConsoleControllerBroadcastHandler BroadcastEvent;
+        /// <summary>
+        /// 관리자가 명령어를 입력했을 때
+        /// </summary>
         public static event ConsoleControllerBroadcastHandler Broadcast
         {
             add
@@ -42,6 +48,9 @@ namespace FlowServer.Server
         }
 
         private static event ConsoleControllerConnectionHandler UpdateConnectionEvent;
+        /// <summary>
+        /// 새로운 연결이 성립되어 리스트 업데이트 요청이 왔을 때
+        /// </summary>
         public static event ConsoleControllerConnectionHandler UpdateConnection
         {
             add
@@ -57,7 +66,9 @@ namespace FlowServer.Server
 
         public static void MessageBroadcast(string message)
         {
-            BroadcastEvent(message);
+            string[] args = message.Split(' ');
+            args[0] = args[0].ToLower();
+            BroadcastEvent(message, args);
         }
 
         public static void Log(string content, string agent = "Undefined Agent")
@@ -81,7 +92,7 @@ namespace FlowServer.Server
         }
 
 
-        public static void UpdateConnectionList(List<FlowClient> list)
+        public static void UpdateConnectionList(List<IFlowClient> list)
         {
             UpdateConnectionEvent(list);
         }
