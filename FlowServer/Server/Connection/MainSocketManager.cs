@@ -10,7 +10,6 @@ using FlowServer.Server.FlowConsole;
 
 namespace FlowServer.Server.Connection
 {
-    public delegate void ClientHandler(FlowClient client);
     /// <summary>
     /// 클라이언트 접속 관리. 클라이언트 요청 수락 및 클라이언트 객체 관리
     /// </summary>
@@ -27,6 +26,11 @@ namespace FlowServer.Server.Connection
             threadMain.Start();
         }
 
+        /// <summary>
+        /// 콘솔 메시지에 따른 처리 정의
+        /// </summary>
+        /// <param name="message">메시지 원본</param>
+        /// <param name="convertedArgs">요소별로 나눈 메시지 원본</param>
         private void ConsoleController_Broadcast(string message, string[] convertedArgs)
         {
             Console.WriteLine("Broadcast : " + convertedArgs[0]);
@@ -82,29 +86,43 @@ namespace FlowServer.Server.Connection
             listener.Bind(localEndPoint);
             listener.Listen(10);
 
-            listener.BeginAccept(new AsyncCallback(AcceptCallBack), listener);
+            listener.BeginAccept(new AsyncCallback(AcceptCallback), listener);
             ConsoleController.Log("Accepting...");
         }
 
-        private void AcceptCallBack(IAsyncResult ar)
+        /// <summary>
+        /// 비동기 소켓 Accept을 위한 Callback
+        /// </summary>
+        /// <param name="ar">비동기 호출 결과</param>
+        private void AcceptCallback(IAsyncResult ar)
         {
             Socket listener = (Socket)ar.AsyncState;
             Socket clientSocket = listener.EndAccept(ar);
 
             ConsoleController.Debug("Connected : " + clientSocket.RemoteEndPoint.ToString());
 
-            FlowClient client = new FlowClient(clientSocket, DisconnectClient);
+            FlowClient client = new FlowClient(clientSocket);
+            client.MessageReceived += Client_MessageReceived;
+            client.Disconnected += DisconnectClient;
             clients.Add(client);
 
             List<IFlowClient> iClients = new List<IFlowClient>(clients);
             ConsoleController.UpdateConnectionList(iClients);
 
-            listener.BeginAccept(new AsyncCallback(AcceptCallBack), listener);
+            listener.BeginAccept(new AsyncCallback(AcceptCallback), listener);
             ConsoleController.Log("Accepting...");
         }
 
-        protected void DisconnectClient(FlowClient client)
+
+        private void Client_MessageReceived(string result, IFlowClient client)
         {
+            ConsoleController.Log(result, client.ToString());
+        }
+
+        private void DisconnectClient(FlowClient client)
+        {
+            client.Dispose();
+
             ConsoleController.Warn("Disconnected : " + client.ToString());
             //Client 접속 인터페이스를 만들어서 컨트롤할 수 있도록 수정
             clients.Remove(client);

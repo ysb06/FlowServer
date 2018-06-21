@@ -5,10 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading;
-using FlowServer.Server;
 using FlowServer.Server.FlowConsole;
 using FlowServer.Server.Connection;
 
@@ -85,16 +82,10 @@ namespace FlowServer
                         break;
                 }
 
-                if (currentConsoleMessageRequestingAgent.Equals(agent))
-                {
-                    textConsole.AppendText("\r\n");
-                }
-                else
-                {
-                    textConsole.AppendText("\r\n\r\n");
-                }
+                textConsole.AppendText("\r\n");
 
                 currentConsoleMessageRequestingAgent = agent;
+                textConsole.ScrollToCaret();
             });
         }
 
