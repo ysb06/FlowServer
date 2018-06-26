@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +11,9 @@ namespace FlowServer.Server.Connection
     public delegate void ClientMessageHandler(string result, IFlowClient client);
     public delegate void ClientDisconnectionHandler(FlowClient client);
 
-
+    /// <summary>
+    /// 클라이언트 객체
+    /// </summary>
     public class FlowClient : IFlowClient
     {
         private event ClientMessageHandler MessageReceivedEvent;
@@ -30,6 +33,7 @@ namespace FlowServer.Server.Connection
         public const int BUFFER_SIZE = 1024;
 
         private readonly string name = "No Name";
+        private string id = "No ID";
 
         private readonly Socket connection = null;
         private readonly byte[] buffer = new byte[BUFFER_SIZE];
@@ -44,6 +48,7 @@ namespace FlowServer.Server.Connection
             connection.Send(Encoding.UTF8.GetBytes("Server : Accept"));
 
             name = connection.RemoteEndPoint.ToString();
+            GenerateID();
 
             connection.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, new AsyncCallback(ReceiveMessageCallback), null);
         }
@@ -62,7 +67,7 @@ namespace FlowServer.Server.Connection
 
             int readNum = connection.EndReceive(result);
                         
-
+            //버퍼가 가득 찰 정도로 0을 보낼 경우 클라이언트의 연결이 끊어졌다고 판단하여 Client를 Dispose
             for(int i = 0; i < buffer.Length; i++)
             {
                 if (buffer[i] != 0)
@@ -72,6 +77,7 @@ namespace FlowServer.Server.Connection
 
                 if(i == buffer.Length - 1)
                 {
+                    Dispose();
                     DisconnectedEvent(this);
                     return;
                 }
@@ -98,9 +104,9 @@ namespace FlowServer.Server.Connection
             return connection;
         }
 
-        public void Dispose()
+        private void Dispose()
         {
-            connection.Disconnect(false);
+            connection.Disconnect(true);
             connection.Close();            
             connection.Dispose();
         }
@@ -114,6 +120,27 @@ namespace FlowServer.Server.Connection
         public void SendMessage(byte[] message)
         {
             connection.Send(message);
+        }
+
+        private void GenerateID()
+        {
+            StringBuilder builder = new StringBuilder(name);
+            builder.Append(DateTime.Now);
+
+            byte[] result = HashAlgorithm.Create().ComputeHash(Encoding.UTF8.GetBytes(builder.ToString()));
+            string str = "";
+
+            for(int i = 0; i < result.Length; i++)
+            {
+                str += BitConverter.ToString(result, i, 1).ToLower();
+            }
+
+            id = str;
+        }
+
+        public string GetID()
+        {
+            return id;
         }
     }
 }

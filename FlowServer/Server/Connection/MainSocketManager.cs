@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using FlowServer.Server.FlowConsole;
+using FlowServer.Server.FlowServices.Chatbot;
 
 namespace FlowServer.Server.Connection
 {
@@ -99,12 +100,13 @@ namespace FlowServer.Server.Connection
             Socket listener = (Socket)ar.AsyncState;
             Socket clientSocket = listener.EndAccept(ar);
 
-            ConsoleController.Debug("Connected : " + clientSocket.RemoteEndPoint.ToString());
-
             FlowClient client = new FlowClient(clientSocket);
             client.MessageReceived += Client_MessageReceived;
             client.Disconnected += DisconnectClient;
+            client.GetID();
             clients.Add(client);
+
+            ConsoleController.Debug("Connected : " + clientSocket.RemoteEndPoint.ToString());
 
             List<IFlowClient> iClients = new List<IFlowClient>(clients);
             ConsoleController.UpdateConnectionList(iClients);
@@ -121,10 +123,7 @@ namespace FlowServer.Server.Connection
 
         private void DisconnectClient(FlowClient client)
         {
-            client.Dispose();
-
             ConsoleController.Warn("Disconnected : " + client.ToString());
-            //Client 접속 인터페이스를 만들어서 컨트롤할 수 있도록 수정
             clients.Remove(client);
 
             List<IFlowClient> iClients = new List<IFlowClient>(clients);
