@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Threading;
 using FlowServer.Server.FlowConsole;
 using FlowServer.Server.FlowServices.Chatbot;
+using FlowServer.Server.FlowServices;
 
 namespace FlowServer.Server.Connection
 {
@@ -18,13 +19,28 @@ namespace FlowServer.Server.Connection
     {
         private Thread threadMain;
 
+        private readonly FlowServiceManager service;
+
         private readonly List<FlowClient> clients = new List<FlowClient>();
+        public event ClientConnectionHandler ClientConnectedEvent;
+        public event ClientConnectionHandler ClientConnected
+        {
+            add { ClientConnectedEvent += value; }
+            remove { ClientConnectedEvent -= value; }
+        }
 
         public MainSocketManager()
         {
+            service = new FlowServiceManager(1);
+            
+
             ConsoleController.Broadcast += ConsoleController_Broadcast;
+            ClientConnectedEvent += service.Service_ClientConnected;
+
             threadMain = new Thread(Initialize);
             threadMain.Start();
+
+
         }
 
         /// <summary>
@@ -102,11 +118,13 @@ namespace FlowServer.Server.Connection
 
             FlowClient client = new FlowClient(clientSocket);
             client.MessageReceived += Client_MessageReceived;
+            client.MessageReceived += service.Service_ReceiveMessage;
             client.Disconnected += DisconnectClient;
             client.GetID();
             clients.Add(client);
 
             ConsoleController.Debug("Connected : " + clientSocket.RemoteEndPoint.ToString());
+            ClientConnectedEvent(client);
 
             List<IFlowClient> iClients = new List<IFlowClient>(clients);
             ConsoleController.UpdateConnectionList(iClients);

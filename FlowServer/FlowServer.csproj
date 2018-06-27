@@ -121,7 +121,9 @@
     <Compile Include="Server\Connection\FlowClient.cs" />
     <Compile Include="Server\Connection\MainSocketManager.cs" />
     <Compile Include="Server\FlowServices\FlowServiceManager.cs" />
+    <Compile Include="Server\FlowServices\Mud\GameEnvironment.cs" />
     <Compile Include="Server\FlowServices\Mud\GameManager.cs" />
+    <Compile Include="Server\FlowServices\Mud\GamePlayer.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

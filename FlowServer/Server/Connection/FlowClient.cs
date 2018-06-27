@@ -10,6 +10,7 @@ namespace FlowServer.Server.Connection
 {
     public delegate void ClientMessageHandler(string result, IFlowClient client);
     public delegate void ClientDisconnectionHandler(FlowClient client);
+    public delegate void ClientConnectionHandler(IFlowClient client);
 
     /// <summary>
     /// 클라이언트 객체
@@ -45,7 +46,7 @@ namespace FlowServer.Server.Connection
             stringDecoder = new UTF8Encoding();
 
             connection = childSocket;
-            connection.Send(Encoding.UTF8.GetBytes("Server : Accept"));
+            connection.Send(Encoding.UTF8.GetBytes("Server : Accept\r\n"));
 
             name = connection.RemoteEndPoint.ToString();
             GenerateID();
