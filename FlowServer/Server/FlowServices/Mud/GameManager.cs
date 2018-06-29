@@ -34,9 +34,15 @@ namespace FlowServer.Server.FlowServices.Mud
             ConsoleController.Log("Game " + channel + " Initializing Complete");
         }
 
+        public void ReceiveClient(IFlowClient client)
+        {
+            players.Add(client, new GamePlayer());
+        }
+
         public void ReceiveGameMessage(string message, IFlowClient client)
         {
-            ConsoleController.Debug("Game" + channel + " " + message);
+            players.TryGetValue(client, out GamePlayer player);
+            player.ReceiveMessage(message);
         }
     }
 }

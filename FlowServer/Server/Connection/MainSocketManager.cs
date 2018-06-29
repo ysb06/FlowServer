@@ -31,7 +31,7 @@ namespace FlowServer.Server.Connection
 
         public MainSocketManager()
         {
-            service = new FlowServiceManager(1);
+            service = new FlowServiceManager();
             
 
             ConsoleController.Broadcast += ConsoleController_Broadcast;
