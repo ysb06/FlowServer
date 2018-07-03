@@ -139,7 +139,7 @@ namespace FlowServer.Server.Connection
             id = str;
         }
 
-        public string GetID()
+        public string GetUniqueHash()
         {
             return id;
         }

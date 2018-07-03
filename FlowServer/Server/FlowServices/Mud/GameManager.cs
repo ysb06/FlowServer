@@ -12,8 +12,11 @@ namespace FlowServer.Server.FlowServices.Mud
     class GameManager
     {
         private readonly int channel = 0;
-        private readonly Thread thread;
-        private readonly Queue<string> clientRequestList;
+        private readonly Queue<GameCommand> clientRequestList;
+        
+
+        private Timer workThreadTimer;
+        private const int updateRate = 0;
 
         private readonly GameEnvironment environment;
         private readonly Dictionary<IFlowClient, GamePlayer> players;
@@ -21,28 +24,64 @@ namespace FlowServer.Server.FlowServices.Mud
         public GameManager(int channel)
         {
             this.channel = channel;
-            clientRequestList = new Queue<string>();
+            clientRequestList = new Queue<GameCommand>();
+
             environment = new GameEnvironment();
             players = new Dictionary<IFlowClient, GamePlayer>();
 
-            thread = new Thread(Initialize);
-            thread.Start();
+            workThreadTimer = new Timer(Loop);
+            workThreadTimer.Change(0, 17);
+            
+            ConsoleController.Log("Games " + channel + " Initializing Complete");
         }
 
-        public void Initialize()
+        public void Loop(object state)
         {
-            ConsoleController.Log("Game " + channel + " Initializing Complete");
+            while (clientRequestList.Count > 0)
+            {
+                GameCommand req = clientRequestList.Dequeue();
+                Console.Write(req.Title + ", ");
+                Console.WriteLine(req.Command);
+            }
         }
 
-        public void ReceiveClient(IFlowClient client)
+        public void AddPlayer(IFlowClient client)
         {
             players.Add(client, new GamePlayer());
+            GameCommand request = new GameCommand
+            {
+                Type = GameCommandType.SYSTEM,
+                Target = client,
+                Title = "Send_List"
+            };
+            clientRequestList.Enqueue(request);
+
         }
 
         public void ReceiveGameMessage(string message, IFlowClient client)
         {
-            players.TryGetValue(client, out GamePlayer player);
-            player.ReceiveMessage(message);
+            if (message[1] == 'I')
+            {
+                string[] str = message.Split('^');
+
+                GameCommand request = new GameCommand
+                {
+                    Type = GameCommandType.INPUT,
+                    Target = client,
+                };
+
+                if(str.Length == 1)
+                {
+                    request.Command = str[0].Remove(0, 2);
+                    clientRequestList.Enqueue(request);
+                }
+                else if(str.Length > 1)
+                {
+                    request.Title = str[0].Remove(0, 2);
+                    request.Command = str[1];
+                    clientRequestList.Enqueue(request);
+                }
+            }
         }
     }
 }

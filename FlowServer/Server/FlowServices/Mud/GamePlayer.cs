@@ -11,10 +11,5 @@ namespace FlowServer.Server.FlowServices.Mud
         private readonly string currentMap = "";
         private readonly int positionX = 0;
         private readonly int positionY = 0;
-
-        public void ReceiveMessage(string message)
-        {
-
-        }
     }
 }

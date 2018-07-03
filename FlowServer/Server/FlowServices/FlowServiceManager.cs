@@ -32,7 +32,7 @@ namespace FlowServer.Server.FlowServices
 
         public void Service_ReceiveMessage(string message, IFlowClient client)
         {
-            if (message != null && message == "")
+            if (message != null && message != "")
             {
                 if (message[0] == 'G')
                 {
@@ -51,7 +51,7 @@ namespace FlowServer.Server.FlowServices
             //그럴 경우 이 서비스 매니저도 필요 없을 듯
             if(game != null && game.Length != 0)
             {
-                game[0].ReceiveClient(client);
+                game[0].AddPlayer(client);
             }
             else
             {

@@ -37,6 +37,7 @@ namespace FlowServer.Server.Connection
             ConsoleController.Broadcast += ConsoleController_Broadcast;
             ClientConnectedEvent += service.Service_ClientConnected;
 
+
             threadMain = new Thread(Initialize);
             threadMain.Start();
 
@@ -120,7 +121,7 @@ namespace FlowServer.Server.Connection
             client.MessageReceived += Client_MessageReceived;
             client.MessageReceived += service.Service_ReceiveMessage;
             client.Disconnected += DisconnectClient;
-            client.GetID();
+            client.GetUniqueHash();
             clients.Add(client);
 
             ConsoleController.Debug("Connected : " + clientSocket.RemoteEndPoint.ToString());

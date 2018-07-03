@@ -10,7 +10,7 @@ namespace FlowServer.Server.Connection
     public interface IFlowClient
     {
         string ToString();
-        string GetID();
+        string GetUniqueHash();
     }
 }
 
